@@ -5,8 +5,11 @@ import java.sql.SQLException;
 import net.dallascricket.scheduleLoader.dao.MatchDAO;
 import net.dallascricket.scheduleLoader.util.ServiceProperties;
 
+import org.apache.log4j.Logger;
+
 public class TestDBDAOManager extends DAOManager{
 	private static String server, db, username, password;
+	private final static Logger logger = Logger.getLogger(TestDBDAOManager.class);
 	static{
 		try {
 			server = ServiceProperties.getServiceProperty("db.local.address");
@@ -15,7 +18,7 @@ public class TestDBDAOManager extends DAOManager{
 			 password = ServiceProperties.getServiceProperty("db.local.pwd");
 			
 		} catch (Exception e) {
-			System.err.println("Error reading local db properties");
+			logger.error("Error reading local db properties");
 		}
 	}
 	
@@ -33,7 +36,7 @@ public class TestDBDAOManager extends DAOManager{
 		return DAOManagerSingleton.INSTANCE;
 	}
 	
-	public static void main(String[]args) throws SQLException
+	public static void main(String[]args) throws SQLException, ClassNotFoundException
     {
        DAOManager daoManager =  TestDBDAOManager.getInstance();
        MatchDAO match = (MatchDAO) daoManager.getDAO(Table.MATCH);

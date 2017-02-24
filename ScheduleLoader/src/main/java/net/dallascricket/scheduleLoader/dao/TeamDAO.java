@@ -6,10 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import net.dallascricket.scheduleLoader.db.domain.Team;
 
 public class TeamDAO extends GenericDAO<Team> {
 	private static final String TABLENAME = "team";
+	private final static Logger logger = Logger.getLogger(TeamDAO.class);
 
 	public TeamDAO(Connection con) {
 		super(con, TABLENAME);
@@ -19,7 +22,7 @@ public class TeamDAO extends GenericDAO<Team> {
 	public HashMap<String, Integer> readTeamTable() throws SQLException{
 		ResultSet result = null;
 		HashMap<String, Integer> teamMap = new HashMap<String, Integer>();
-		System.out.println("Connected to the database!!! Getting team Table...");
+		logger.debug("Getting team Table...");
 		Statement state = con.createStatement();
 		String sql = "select * from dbo.team";
 		result = state.executeQuery(sql);

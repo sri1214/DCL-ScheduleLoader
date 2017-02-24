@@ -8,9 +8,12 @@ import java.util.HashMap;
 
 import net.dallascricket.scheduleLoader.db.domain.Ground;
 
+import org.apache.log4j.Logger;
+
 public class GroundDAO extends GenericDAO<Ground> {
 	
 	private static final String TABLENAME = "ground";
+	private final static Logger logger = Logger.getLogger(GroundDAO.class);
 
 	public GroundDAO(Connection con) {
 		super(con, TABLENAME);
@@ -20,7 +23,7 @@ public class GroundDAO extends GenericDAO<Ground> {
 	public HashMap<String, Integer> readGroundTable() throws SQLException {
 		ResultSet result = null;
 		HashMap<String, Integer> groundMap = new HashMap<String, Integer>();
-		System.out.println("Connected to the database!!! Getting Ground Table...");
+		logger.debug("Getting Ground Table...");
 		Statement state = con.createStatement();
 		String sql = "select * from dbo.ground";
 		result = state.executeQuery(sql);

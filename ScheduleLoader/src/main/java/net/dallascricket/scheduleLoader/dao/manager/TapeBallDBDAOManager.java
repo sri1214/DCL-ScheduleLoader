@@ -33,7 +33,7 @@ public class TapeBallDBDAOManager extends DAOManager{
 		return DAOManagerSingleton.INSTANCE;
 	}
 	
-	public static void main(String[]args) throws SQLException
+	public static void main(String[]args) throws SQLException, ClassNotFoundException
     {
        DAOManager daoManager =  TapeBallDBDAOManager.getInstance();
        MatchDAO match = (MatchDAO) daoManager.getDAO(Table.MATCH);

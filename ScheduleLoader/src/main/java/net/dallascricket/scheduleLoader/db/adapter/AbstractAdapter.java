@@ -8,7 +8,10 @@ import java.util.Set;
 import net.dallascricket.scheduleLoader.db.domain.Match;
 import net.dallascricket.scheduleLoader.domain.MatchData;
 
+import org.apache.log4j.Logger;
+
 public abstract class AbstractAdapter {
+	private final static Logger logger = Logger.getLogger(AbstractAdapter.class);
 	
 	public abstract List<Match> buildMatchObj(List<MatchData> matchDataList,
 			HashMap<String, Integer> teamList,
@@ -44,8 +47,8 @@ public abstract class AbstractAdapter {
 		if (groundList.containsKey(venue))
 			return groundList.get(venue);
 		else {
-			System.err.println("Couldn't find match for ground:" + venue);
-			throw new Exception("couldn't find ground");
+			logger.error("Couldn't find match for ground:" + venue);
+			throw new Exception("couldn't find ground "+venue);
 		}
 	}
 
@@ -65,8 +68,8 @@ public abstract class AbstractAdapter {
 			System.err.println("Couldn't find match for team:" + team);
 			throw new Exception("couldn't find team");
 		}*/
-		System.err.println("Couldn't find match for team:" + team);
-		throw new Exception("couldn't find team");
+		logger.error("Couldn't find match for team:" + team);
+		throw new Exception("couldn't find team: "+team);
 	}
 
 	/**
@@ -94,7 +97,7 @@ public abstract class AbstractAdapter {
 		case "LC":
 			return 1086433336;
 		default:
-			System.err.println("Couldn't find match for division:" + division);
+			logger.error("Couldn't find match for division:" + division);
 			throw new Exception("invalid division");
 		}
 	}

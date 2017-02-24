@@ -8,9 +8,12 @@ import java.util.List;
 import net.dallascricket.scheduleLoader.db.domain.Match;
 import net.dallascricket.scheduleLoader.db.domain.MatchStat;
 
+import org.apache.log4j.Logger;
+
 public class MatchStatDAO extends GenericDAO<MatchStat> {
 	
 	private static final String TABLENAME = "match_stats";
+	private final static Logger logger = Logger.getLogger(MatchStatDAO.class);
 
 	public MatchStatDAO(Connection con) {
 		super(con, TABLENAME);
@@ -18,7 +21,7 @@ public class MatchStatDAO extends GenericDAO<MatchStat> {
 	
 	public void writeIntoMatchStatsTable(List<Match> matchList)
 			throws SQLException {
-		System.out.println("Connected to the database!!! writing into match_stats Table...");
+		logger.debug("writing into match_stats Table...");
 		PreparedStatement statement = con.prepareStatement("INSERT INTO dbo.match_stats (match_id, team_id, inning_sw, runs_scored, total_runs, wickets, overs, extras, nos, wides, byes, over_throw) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 		int totalRows = 0;
 		for (Match match : matchList) {
@@ -53,7 +56,7 @@ public class MatchStatDAO extends GenericDAO<MatchStat> {
 			totalRows += val;
 
 		}
-		System.out.println("Total rows loaded into match_stats table: "
+		logger.debug("Total rows loaded into match_stats table: "
 				+ totalRows);
 	}
 

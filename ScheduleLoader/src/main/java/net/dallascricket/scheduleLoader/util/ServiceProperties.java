@@ -9,17 +9,20 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
+
 public class ServiceProperties {
 	
 	private static Properties serviceProps = null;
+	private final static Logger logger = Logger.getLogger(ServiceProperties.class);
 	
 	public synchronized static String getServiceProperty(String key) throws Exception{
 		if (serviceProps == null) {
 			try {
-				System.out.println("--------building service properties in getServiceProperty-----");
+				logger.debug("--------building service properties in getServiceProperty-----");
 				serviceProps = buildServiceProperties();
 			} catch (IOException | NamingException e) {
-				System.err.print("error building service properties "+e);
+				logger.error("error building service properties\n"+e);
 				throw e;
 			}
 		}
@@ -38,7 +41,7 @@ public class ServiceProperties {
 		InputStream propsStream  = new FileInputStream(propsfile);;
 		props.load(propsStream);
 		propsStream.close();
-		System.out.println("loaded base properties from:" + propsfile);
+		logger.debug("loaded properties from:" + propsfile);
 		return props;
 
 	}
@@ -52,7 +55,7 @@ public class ServiceProperties {
 		   folderName = (String) context.lookup("java:comp/env/config");
 		   return folderName + "config.properties";
 		} catch (NamingException ex) {
-		   System.err.println("exception in jndi lookup: "+ex.getMessage());
+			logger.error("exception in jndi lookup: "+ex.getMessage());
 		   throw ex;
 		}
 		
