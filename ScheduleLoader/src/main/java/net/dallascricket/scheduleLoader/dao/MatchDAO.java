@@ -10,8 +10,11 @@ import java.util.List;
 
 import net.dallascricket.scheduleLoader.db.domain.Match;
 
+import org.apache.log4j.Logger;
+
 public class MatchDAO extends GenericDAO<Match> {
 	private static final String TABLENAME = "Match";
+	private final static Logger logger = Logger.getLogger(MatchDAO.class);
 
 	public MatchDAO(Connection con) {
 		super(con, TABLENAME);
@@ -19,14 +22,14 @@ public class MatchDAO extends GenericDAO<Match> {
 
 	public int getLatestMatchId() throws SQLException {
 		int matchId = 0;
-		System.out.println("Getting latest matchid from Match Table...");
+		logger.debug("Getting latest matchid from Match Table...");
 		Statement state = con.createStatement();
 		String sql = "select match_id from Match order by match_id DESC";
 		ResultSet result = state.executeQuery(sql);
 		if (result.next()) {
 			matchId = result.getInt(1);
 		}
-		System.out.println("Latest matchid - " + matchId);
+		logger.debug("Latest matchid - " + matchId);
 		return matchId;
 	}
 	
@@ -40,7 +43,7 @@ public class MatchDAO extends GenericDAO<Match> {
 		}
 		sb.length();
 		sb.delete(sb.length() - 4, sb.length() - 1);
-		System.out.println("Connected to the database!!! Getting latest matchdate from Match Table...");
+		logger.debug("Getting latest matchdate from Match Table...");
 		Statement state = con.createStatement();
 		String sql = "select match_dt from Match where " + sb.toString().trim()
 				+ " order by match_dt DESC";
@@ -49,13 +52,13 @@ public class MatchDAO extends GenericDAO<Match> {
 		if (result.next()) {
 			matchDt = result.getTimestamp(1);
 		}
-		System.out.println("Latest match date - " + matchDt);
+		logger.debug("Latest match date - " + matchDt);
 
 		return matchDt;
 	}
 
 	public void loadMatches(List<Match> matchList) throws SQLException {
-		System.out.println("Connected to the database!!! writing into Match Table...");
+		logger.debug("writing into Match Table...");
 		PreparedStatement statement = con
 				.prepareStatement("INSERT INTO dbo.match (match_id, tournament_id, team1_id, team2_id, umpiring_team_id, type_cd, match_dt, ground_id, start_time, end_time, umpiring_team2_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 
@@ -75,7 +78,7 @@ public class MatchDAO extends GenericDAO<Match> {
 			int val = statement.executeUpdate();
 			totalRows += val;
 		}
-		System.out.println("Total matches loaded into match table: "+ totalRows);
+		logger.debug("Total matches loaded into match table: "+ totalRows);
 	}
 
 }

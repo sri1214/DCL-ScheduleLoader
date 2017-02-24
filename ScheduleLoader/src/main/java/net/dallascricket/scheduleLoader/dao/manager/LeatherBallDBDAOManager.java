@@ -2,9 +2,12 @@ package net.dallascricket.scheduleLoader.dao.manager;
 
 import net.dallascricket.scheduleLoader.util.ServiceProperties;
 
+import org.apache.log4j.Logger;
+
 public class LeatherBallDBDAOManager extends DAOManager {
 	
 	private static String server, db, username, password;
+	private final static Logger logger = Logger.getLogger(LeatherBallDBDAOManager.class);
 	static{
 		try {
 			server = ServiceProperties.getServiceProperty("db.leatherball.address");
@@ -13,7 +16,7 @@ public class LeatherBallDBDAOManager extends DAOManager {
 			 password = ServiceProperties.getServiceProperty("db.leatherball.pwd");
 			
 		} catch (Exception e) {
-			System.err.println("Error reading leatherball db properties");
+			logger.error("Error reading leatherball db properties");
 		}
 	}
 	

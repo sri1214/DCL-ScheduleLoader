@@ -26,11 +26,14 @@ import net.dallascricket.scheduleLoader.db.domain.Match;
 import net.dallascricket.scheduleLoader.domain.MatchData;
 import net.dallascricket.scheduleLoader.util.ServiceProperties;
 
+import org.apache.log4j.Logger;
+
 public class ScheduleLoaderController {
 	private DAOManager testDAOManager;
 	private DAOManager tapeDAOManager;
 	private DAOManager leatherDAOManager;
 	private ScheduleExcelLoader scheduleLoader;
+	private final static Logger logger = Logger.getLogger(ScheduleLoaderController.class);
 
 	public ScheduleLoaderController(InputStream excelSheetInputStream)
 			throws IOException {
@@ -41,38 +44,37 @@ public class ScheduleLoaderController {
 	}
 
 	public void loadTapeBall() throws Exception {
-		System.out.println("\n\nProcessing TapeBall Schedule...");
+		logger.info("\n\nProcessing TapeBall Schedule...");
 		try {
 			List<MatchData> matchDataList = scheduleLoader.readTapeBallSheet();
-			processMatchData(matchDataList, new TapeBallAdapter(),
-					tapeDAOManager);
+			processMatchData(matchDataList, new TapeBallAdapter(), tapeDAOManager);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Tapeball schedule upload failed\n", e);
 			throw e;
 		}
-		System.out.println("Tapeball schedule loaded!!!\n\n");
+		logger.info("Tapeball schedule loaded!!!\n\n");
 
 	}
 
 	public void loadLeatherBall() throws Exception {
-		System.out.println("\n\nProcessing LeatherBall Schedule...");
+		logger.info("\n\nProcessing LeatherBall Schedule...");
 		try {
 			List<MatchData> matchDataList = scheduleLoader
 					.readLeatherBallBallSheet();
 			processMatchData(matchDataList, new LeatherBallAdapter(),
 					leatherDAOManager);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("LeatherBall schedule upload failed\n", e);
 			throw e;
 		}
-		System.out.println("LeatherBall schedule loaded!!!\n\n");
+		logger.info("LeatherBall schedule loaded!!!\n\n");
 	}
 
 	protected void processMatchData(List<MatchData> matchDataList,
 			AbstractAdapter adapter, DAOManager daoManager) throws Exception {
 		if (matchDataList == null || matchDataList.isEmpty()) {
-			System.err.print("No entries found in the excel sheet");
-			return;
+			logger.error("No entries found in the excel sheet");
+			throw new Exception("No entries found in the excel sheet");
 		}
 		try {
 			TeamDAO teamDAO = (TeamDAO) daoManager.getDAO(Table.TEAM);
@@ -92,15 +94,14 @@ public class ScheduleLoaderController {
 			else
 				WriteToDB(matchList, daoManager);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("error processing match data-"+ e.getMessage());
 			throw e;
 		}
 	}
 
-	private void WriteToDB(List<Match> matchList, DAOManager daoManager) throws SQLException {
+	private void WriteToDB(List<Match> matchList, DAOManager daoManager) throws SQLException, ClassNotFoundException {
 		MatchDAO matchDAO = (MatchDAO) daoManager.getDAO(Table.MATCH);
-		MatchStatDAO matchStatDAO = (MatchStatDAO) daoManager
-				.getDAO(Table.MATCHSTAT);
+		MatchStatDAO matchStatDAO = (MatchStatDAO) daoManager.getDAO(Table.MATCHSTAT);
 		matchDAO.loadMatches(matchList);
 		matchStatDAO.writeIntoMatchStatsTable(matchList);
 		
@@ -123,10 +124,9 @@ public class ScheduleLoaderController {
 		return tournamentIds;
 	}
 
-	private void WriteToTestDB(List<Match> matchList) throws SQLException {
+	private void WriteToTestDB(List<Match> matchList) throws SQLException, ClassNotFoundException {
 		MatchDAO localMatchDAO = (MatchDAO) testDAOManager.getDAO(Table.MATCH);
-		MatchStatDAO localMatchStatDAO = (MatchStatDAO) testDAOManager
-				.getDAO(Table.MATCHSTAT);
+		MatchStatDAO localMatchStatDAO = (MatchStatDAO) testDAOManager.getDAO(Table.MATCHSTAT);
 		localMatchDAO.loadMatches(matchList);
 		localMatchStatDAO.writeIntoMatchStatsTable(matchList);
 	}

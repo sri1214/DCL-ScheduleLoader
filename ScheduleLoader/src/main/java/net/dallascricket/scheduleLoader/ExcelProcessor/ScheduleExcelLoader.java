@@ -8,6 +8,7 @@ import java.util.List;
 
 import net.dallascricket.scheduleLoader.domain.MatchData;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,6 +19,7 @@ public class ScheduleExcelLoader  {
 	private static int firstNonEmptyCellIndex;
 	private static boolean isFirstNonEmptyCellIndexInitialized;
 	private XSSFWorkbook workbook;
+	private final static Logger logger = Logger.getLogger(ScheduleExcelLoader.class);
 
 	public ScheduleExcelLoader(InputStream inputStream) throws IOException {
 		workbook = new XSSFWorkbook(inputStream);
@@ -35,8 +37,7 @@ public class ScheduleExcelLoader  {
 
 	public List<MatchData> readScheduleExcel(XSSFSheet sheet) {
 		List<MatchData> matchDataList = new ArrayList<MatchData>();
-		System.out
-				.println("Reading excel file sheet - " + sheet.getSheetName());
+		logger.debug("Reading excel file sheet - " + sheet.getSheetName());
 		Iterator<Row> rowIterator = sheet.iterator();
 		int j = 0;
 		while (rowIterator.hasNext()) {
@@ -61,7 +62,7 @@ public class ScheduleExcelLoader  {
 			}
 		}
 
-		System.out.println("No. of entries - " + matchDataList.size());
+		logger.debug("No. of entries - " + matchDataList.size());
 
 		return matchDataList;
 	}

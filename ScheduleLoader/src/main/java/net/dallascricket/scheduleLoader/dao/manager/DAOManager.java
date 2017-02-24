@@ -10,24 +10,25 @@ import net.dallascricket.scheduleLoader.dao.MatchDAO;
 import net.dallascricket.scheduleLoader.dao.MatchStatDAO;
 import net.dallascricket.scheduleLoader.dao.TeamDAO;
 
+import org.apache.log4j.Logger;
+
 public class DAOManager {
 
 	private String url, username, password;
 	private Connection con;
+	private final static Logger logger = Logger.getLogger(DAOManager.class);
 	public enum Table {
 		MATCH, GROUND, TEAM, MATCHSTAT;
 	};
 
 
 
-	public void open() throws SQLException {
+	public void open() throws SQLException, ClassNotFoundException{
 		try {
 			if (this.con == null || this.con.isClosed())
 				this.con = getConnection();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw e;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -40,13 +41,13 @@ public class DAOManager {
 		}
 	}
 
-	public GenericDAO<?> getDAO(Table t) throws SQLException {
+	public GenericDAO<?> getDAO(Table t) throws SQLException, ClassNotFoundException {
 		try {
 			if (this.con == null || this.con.isClosed()) // Let's ensure our
 															// connection is
 															// open
 				this.open();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw e;
 		}
 
@@ -70,7 +71,7 @@ public class DAOManager {
 		sb.append("Connecting to db...\n");
 		sb.append("connection url: "+url+"\n");
 		sb.append("username: "+username);
-		System.out.println(sb);
+		logger.info(sb);
 		Connection connection;
 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -78,7 +79,7 @@ public class DAOManager {
 			connection = DriverManager.getConnection(url);
 		else
 			connection = DriverManager.getConnection(url, username, password);
-		System.out.println("connected!!");
+		logger.info("connected!!");
 		return connection;
 	}
 
