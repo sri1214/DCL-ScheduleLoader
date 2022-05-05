@@ -8,8 +8,10 @@ import java.util.List;
 
 import net.dallascricket.scheduleLoader.domain.MatchData;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,7 +21,7 @@ public class ScheduleExcelLoader  {
 	private static int firstNonEmptyCellIndex;
 	private static boolean isFirstNonEmptyCellIndexInitialized;
 	private XSSFWorkbook workbook;
-	private final static Logger logger = Logger.getLogger(ScheduleExcelLoader.class);
+	private final static Logger logger = LogManager.getLogger(ScheduleExcelLoader.class);
 
 	public ScheduleExcelLoader(InputStream inputStream) throws IOException {
 		workbook = new XSSFWorkbook(inputStream);
@@ -51,7 +53,7 @@ public class ScheduleExcelLoader  {
 					isFirstNonEmptyCellIndexInitialized = true;
 				}
 
-				if (row.getCell(firstNonEmptyCellIndex).getCellType() != Cell.CELL_TYPE_NUMERIC)
+				if (row.getCell(firstNonEmptyCellIndex).getCellType() != CellType.NUMERIC)
 					break;
 				else {
 					MatchData matchData = loadMatchData(row,
@@ -88,7 +90,7 @@ public class ScheduleExcelLoader  {
 	private int getFirstNonEmptyCellIndex(Row row) {
 		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
 			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+			if (cell != null && cell.getCellType() != CellType.BLANK)
 				return c;
 		}
 		return 0;
@@ -97,7 +99,7 @@ public class ScheduleExcelLoader  {
 	public boolean isRowEmpty(Row row) {
 		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
 			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+			if (cell != null && cell.getCellType() != CellType.BLANK)
 				return false;
 		}
 		return true;

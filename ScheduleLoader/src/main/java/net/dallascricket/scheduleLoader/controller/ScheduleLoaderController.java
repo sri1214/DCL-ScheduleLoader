@@ -1,14 +1,5 @@
 package net.dallascricket.scheduleLoader.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import net.dallascricket.scheduleLoader.ExcelProcessor.ScheduleExcelLoader;
 import net.dallascricket.scheduleLoader.dao.GroundDAO;
 import net.dallascricket.scheduleLoader.dao.MatchDAO;
@@ -25,15 +16,24 @@ import net.dallascricket.scheduleLoader.db.adapter.TapeBallAdapter;
 import net.dallascricket.scheduleLoader.db.domain.Match;
 import net.dallascricket.scheduleLoader.domain.MatchData;
 import net.dallascricket.scheduleLoader.util.ServiceProperties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ScheduleLoaderController {
 	private DAOManager testDAOManager;
 	private DAOManager tapeDAOManager;
 	private DAOManager leatherDAOManager;
 	private ScheduleExcelLoader scheduleLoader;
-	private final static Logger logger = Logger.getLogger(ScheduleLoaderController.class);
+	private final static Logger logger = LogManager.getLogger(ScheduleLoaderController.class);
 
 	public ScheduleLoaderController(InputStream excelSheetInputStream)
 			throws IOException {

@@ -1,17 +1,17 @@
 package net.dallascricket.scheduleLoader.db.adapter;
 
+import net.dallascricket.scheduleLoader.db.domain.Match;
+import net.dallascricket.scheduleLoader.domain.MatchData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import net.dallascricket.scheduleLoader.db.domain.Match;
-import net.dallascricket.scheduleLoader.domain.MatchData;
-
-import org.apache.log4j.Logger;
-
 public abstract class AbstractAdapter {
-	private final static Logger logger = Logger.getLogger(AbstractAdapter.class);
+	private final static Logger logger = LogManager.getLogger(AbstractAdapter.class);
 	
 	public abstract List<Match> buildMatchObj(List<MatchData> matchDataList,
 			HashMap<String, Integer> teamList,

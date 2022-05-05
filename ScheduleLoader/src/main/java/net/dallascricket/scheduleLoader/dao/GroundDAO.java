@@ -8,12 +8,13 @@ import java.util.HashMap;
 
 import net.dallascricket.scheduleLoader.db.domain.Ground;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GroundDAO extends GenericDAO<Ground> {
 	
 	private static final String TABLENAME = "ground";
-	private final static Logger logger = Logger.getLogger(GroundDAO.class);
+	private final static Logger logger = LogManager.getLogger(GroundDAO.class);
 
 	public GroundDAO(Connection con) {
 		super(con, TABLENAME);

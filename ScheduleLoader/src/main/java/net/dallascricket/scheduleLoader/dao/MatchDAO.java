@@ -1,20 +1,15 @@
 package net.dallascricket.scheduleLoader.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.List;
-
 import net.dallascricket.scheduleLoader.db.domain.Match;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import org.apache.log4j.Logger;
+import java.sql.*;
+import java.util.List;
 
 public class MatchDAO extends GenericDAO<Match> {
 	private static final String TABLENAME = "Match";
-	private final static Logger logger = Logger.getLogger(MatchDAO.class);
+	private final static Logger logger = LogManager.getLogger(MatchDAO.class);
 
 	public MatchDAO(Connection con) {
 		super(con, TABLENAME);

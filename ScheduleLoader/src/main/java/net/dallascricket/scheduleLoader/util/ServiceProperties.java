@@ -1,20 +1,20 @@
 package net.dallascricket.scheduleLoader.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import org.apache.log4j.Logger;
-
 public class ServiceProperties {
 	
 	private static Properties serviceProps = null;
-	private final static Logger logger = Logger.getLogger(ServiceProperties.class);
+	private final static Logger logger = LogManager.getLogger(ServiceProperties.class);
 	
 	public synchronized static String getServiceProperty(String key) throws Exception{
 		if (serviceProps == null) {
